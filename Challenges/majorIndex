@@ -1,0 +1,33 @@
+/*
+Given a non-negative number, your task is to write this number in base 2 and calculate the sum of positions of 1s that are followed by 0s counting from right.
+
+Example
+
+For number = 83, the output should be
+majorIndex(number) = 7.
+
+8310 = 10100112 which has 1's followed by 0's in positions 2 and 5 (reading from the right), so the answer is 2 + 5 = 7.
+
+Positions of the digits to be found are colored red.
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] string number
+
+Constraints:
+0 ≤ int(number) < 253.
+
+[output] integer
+*/
+
+int majorIndex(string number) {
+    string s = Convert.ToString(Convert.ToInt64(number),2);
+    int count = 0; 
+    for(int i = s.Length-1; i > 0; i--){
+        if(s[i]=='1' && s[i-1] == '0'){
+            count += s.Length-i;
+        }
+    }
+    return count;
+}
