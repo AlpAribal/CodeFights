@@ -1,0 +1,86 @@
+/*
+There are n kids in the class. As school year has just began, the kids barely know each other. However, the teacher knows that there are already some pairs of friends in the class.
+
+Since all kids are very friendly and amicable, they should quickly come to know each other. If kid a is a friend of kid b and kid b is a friend of kid c, kid a will definitely become a friend of kid c. Obviously, if kid a is a friend of kid b, kid b is in turn a friend of kida.
+
+The teacher wants the class to be as united as possible, so she wants to know how many friends groups there will be in the class. A friends group is a set of kids who are friends to one another. For example, [a, b, c] is a friends group if a is a friend to b, a is a friend to c, and b is a friend to c.
+
+Given the number of kids in the class n and the list of pairs of friends, your task is to calculate the number of friends groups they will form.
+
+Example
+
+For n = 3 and friends = [[0, 1]], the output should be
+friendGroups(n, friends) = 2.
+
+There will be two frindsGroups: [0, 1] and [2].
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] integer n
+
+The number of kids.
+
+Constraints:
+2 ≤ n ≤ 1000.
+
+[input] array.array.integer friends
+
+A rectangular matrix representing pairs of friends. Each pair is given in the format [kid1, kid2], which means that the kid1 is a friend of kid2.
+
+Constraints:
+0 ≤ friends.length ≤ 3000,
+friends[i].length = 2,
+0 ≤ friends[i][j] < n.
+
+[output] integer
+
+The number of friends groups in class.
+
+
+*/
+
+int friendGroups(int n, int[][] friends) {
+    List<HashSet<int>> hashList = new List<HashSet<int>>();
+    for(int i = 0; i < friends.Length; i++){
+        bool isFound = false;
+        foreach(HashSet<int> h in hashList){
+            if(h.Contains(friends[i][0]) || h.Contains(friends[i][1])){
+                h.Add(friends[i][0]);
+                h.Add(friends[i][1]);
+                isFound = true;
+                break;
+            }
+        }
+        if(!isFound){
+            HashSet<int> h = new HashSet<int>();
+            h.Add(friends[i][0]);
+            h.Add(friends[i][1]);
+            hashList.Add(h);
+        }
+    }
+
+    for(int i = hashList.Count-1; i > -1; i--){
+        bool didChange = false;
+        for(int j = i - 1; j > -1; j--){
+            foreach(int c in hashList[i]){
+                if(hashList[j].Contains(c)){
+                    foreach(int d in hashList[i]){
+                        hashList[j].Add(d);
+                    }
+                    hashList.RemoveAt(i);
+                    didChange = true;
+                    break;
+                }
+            }
+            if(didChange)
+                break;
+        }
+    }
+    
+    int count = 0;
+    foreach(HashSet<int> h in hashList){
+        count += h.Count;
+    }
+    return n - count + hashList.Count;
+}
