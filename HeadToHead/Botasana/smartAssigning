@@ -1,0 +1,11 @@
+string smartAssigning(string[] names, bool[] statuses, int[] projects, int[] tasks) {
+    int minTasks = tasks[0], proj = projects[0], index = 0;
+    for(int i = 1; i < names.Length; i++){
+        if(!statuses[i] && (tasks[i] < minTasks || (tasks[i] == minTasks && projects[i] < proj))){
+            index = i;
+            minTasks = tasks[i];
+            proj = projects[i];
+        }
+    }
+    return names[index];
+}
