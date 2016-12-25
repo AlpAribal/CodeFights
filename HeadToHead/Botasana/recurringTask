@@ -1,0 +1,49 @@
+string[] recurringTask(string firstDate, int k, string[] daysOfTheWeek, int n) {
+    string[] res = new string[n];
+    DayOfWeek[] days = new DayOfWeek[daysOfTheWeek.Length];
+    for(int i = 0; i < days.Length; i++){
+        if(daysOfTheWeek[i].Equals("Sunday")){
+            days[i] = DayOfWeek.Sunday;
+        }
+        else if(daysOfTheWeek[i].Equals("Monday")){
+            days[i] = DayOfWeek.Monday;
+        }
+        else if(daysOfTheWeek[i].Equals("Tuesday")){
+            days[i] = DayOfWeek.Tuesday;
+        }
+        else if(daysOfTheWeek[i].Equals("Wednesday")){
+            days[i] = DayOfWeek.Wednesday;
+        }
+        else if(daysOfTheWeek[i].Equals("Thursday")){
+            days[i] = DayOfWeek.Thursday;
+        }
+        else if(daysOfTheWeek[i].Equals("Friday")){
+            days[i] = DayOfWeek.Friday;
+        }
+        else if(daysOfTheWeek[i].Equals("Saturday")){
+            days[i] = DayOfWeek.Saturday;
+        }
+    }
+    
+    DateTime date = DateTime.ParseExact(firstDate, "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture); 
+    int count = 0;
+    
+    while(count < n){
+        if(count != 0 && count % days.Length == 0 && date-DateTime.ParseExact(res[count-1], "dd/MM/yyyy", System.Globalization.CultureInfo.InvariantCulture)==TimeSpan.FromDays(1)){
+            date = date.AddDays((k-1)*7);
+        }
+        bool isFound = false;
+        for(int i = 0; i < days.Length; i++){
+            if(date.DayOfWeek == days[i]){
+                isFound = true;
+                break;
+            }
+        }
+        if(isFound){
+            res[count] = date.ToString("dd/MM/yyyy");
+            count++;
+        }
+        date = date.AddDays(1);
+    }
+    return res;
+}
