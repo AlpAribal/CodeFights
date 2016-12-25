@@ -1,0 +1,15 @@
+string[] multiSelection(int[] dimensions, string[] tasks, int[][] mouseCoordinates) {
+    List<string> tasksList = new List<string>();
+    double minY = Math.Min(mouseCoordinates[0][1],mouseCoordinates[1][1]);
+    double maxY = Math.Max(mouseCoordinates[0][1],mouseCoordinates[1][1]);
+    double minX = Math.Min(mouseCoordinates[0][0],mouseCoordinates[1][0]);
+    double maxX = Math.Max(mouseCoordinates[0][0],mouseCoordinates[1][0]);
+    if(dimensions[1] >= minY)
+        tasksList.Add(tasks[0]);
+    for(int i = 1; i < tasks.Length; i++){
+        if(dimensions[1]*(i+1) + dimensions[2]*i >= minY && dimensions[1]*i + dimensions[2]*i <= maxY){
+            tasksList.Add(tasks[i]);
+        }
+    }
+    return tasksList.ToArray();
+}
