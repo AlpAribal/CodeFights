@@ -1,0 +1,40 @@
+/*
+Given the final position and score of a CodeFighter in a tournament, return the number of coins and XP they will get.
+
+Here is how these values can be calculated:
+
+coins: 2000 * (1 / 2)position rounded down to the nearest integer;
+XP: 2 * score if position equals 1 and score otherwise.
+Example
+
+For position = 1 and score = 500, the output should be
+codefightsTournament(position, score) = [2000, 1000].
+
+For position = 6 and score = 100, the output should be
+codefightsTournament(position, score) = [62, 100].
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] integer position
+
+Position the CodeFighter placed in the tournament.
+
+Constraints:
+1 ≤ position ≤ 20.
+
+[input] integer score
+
+The final score.
+
+Constraints:
+0 ≤ points ≤ 500.
+
+[output] array.integer
+
+Array of length 2, where the first element is the number of coins, and the second element is XP the CodeFighter will get.
+*/
+
+int[] codefightsTournament(int p, int s) {
+    return new int[]{2000/Convert.ToInt32(Math.Pow(2,p-1)), p == 1 ? 2*s : s};
+}
