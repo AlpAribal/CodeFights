@@ -1,0 +1,46 @@
+/*
+In mathematics, the Fibonacci numbers are the numbers of the Fibonacci sequence that goes as follows: 1, 1, 2, 3, 5, 8,....
+
+Your mission today is to calculate the nth non-negative integer that does NOT belong to the Fibonacci sequence.
+
+Since the values can be quite big, both input and output are of type string.
+
+Example
+
+remainFib("1") = "4".
+
+It's clear from the list above the 1st element that does not belong to it is number 4.
+
+remainFib("2") = "6".
+
+The 2nd element not in the sequence is 6.
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] string number
+
+Constraints:
+1 ≤ int(number) ≤ 252.
+
+[output] string
+
+The result as a string.
+*/
+
+string remainFib(string number) {
+    Int64 num = Int64.Parse(number);
+    Int64 n1 = 1;
+    Int64 n2 = 2;
+    Int64 count = 0;
+    while(true){
+        if(n2 - n1 - 1 + count >= num)
+            break;
+        count += n2-n1-1;
+        Int64 temp = n2;
+        n2 = n1 + n2;
+        n1 = temp;
+    }
+    
+    return (n1 + num - count).ToString();
+}
