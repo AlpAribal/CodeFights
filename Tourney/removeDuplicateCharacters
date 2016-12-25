@@ -1,0 +1,40 @@
+/*
+Remove all characters from a given string that appear more than once in it.
+
+Example
+For str = "zaabcbd", the output should be
+removeDuplicateCharacters(str) = "zcd".
+
+Input/Output
+
+[time limit] 3000ms (java)
+[input] string str
+
+A string consisting of Latin letters and spaces.
+
+Constraints:
+5 ≤ str.length ≤ 30.
+
+[output] string
+
+Initial string where all characters appearing more than once are deleted.
+*/
+
+String removeDuplicateCharacters(String str) {
+  HashMap<Character, Integer> charCount = new HashMap<>();
+  StringBuilder newStr = new StringBuilder();
+  for(int i = 0; i < str.length(); i++) {
+    char symbol = str.charAt(i);
+    if(charCount.containsKey(symbol)) {
+      charCount.put(symbol, charCount.get(symbol) + 1);
+    } else {
+      charCount.put(symbol, 0);
+    }
+  }
+  for(int i = 0; i < str.length(); i++) {
+    if(charCount.get(str.charAt(i)) == 1) {
+      newStr.append(str.charAt(i));
+    }
+  }
+  return newStr.toString();
+}
