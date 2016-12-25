@@ -1,0 +1,75 @@
+int[] rateLimit(int[][] sentBatches, int[][] receivedMessages, int startingAllowance) {
+    Dictionary<int, int> allowances = new Dictionary<int, int>();
+    Dictionary<int, int> lastMsgTime = new Dictionary<int, int>();
+    int sentK = 0, recK = 0;
+    List<int> indices = new List<int>();
+    while(true){
+        while(sentK < sentBatches.Length && (recK >= receivedMessages.Length || sentBatches[sentK][0] < receivedMessages[recK][0])){
+            // Check if we can send the message
+            bool canSend = true;
+            for(int i = 1; i < sentBatches[sentK].Length; i++){
+                int id = sentBatches[sentK][i];
+                if(!lastMsgTime.ContainsKey(id) || lastMsgTime[id] / 86400 != sentBatches[sentK][0] / 86400){
+                    if(allowances.ContainsKey(id)){
+                        allowances[id] = startingAllowance;
+                    }
+                    else{
+                        allowances.Add(id, startingAllowance);
+                    }
+                }
+                if(allowances.ContainsKey(id)){
+                    if(allowances[id] == 0){
+                        canSend = false;
+                        break;
+                    }                        
+                }
+                else{
+                    allowances.Add(id, startingAllowance);
+                }
+            }
+            if(canSend){
+                // Send the message, i.e. decrease allowances
+                for(int i = 1; i < sentBatches[sentK].Length; i++){
+                    int id = sentBatches[sentK][i];
+                    allowances[id]--;
+                    if(lastMsgTime.ContainsKey(id)){
+                        lastMsgTime[id] = sentBatches[sentK][0];
+                    }
+                    else{
+                        lastMsgTime.Add(id, sentBatches[sentK][0]);
+                    }
+                }
+            }
+            else{
+                indices.Add(sentK);
+            }
+            sentK++;
+        }
+        Console.WriteLine("Sending stopped at " + sentK);
+        if(sentK >= sentBatches.Length){
+            break;
+        }
+        while(recK < receivedMessages.Length && sentBatches[sentK][0] >= receivedMessages[recK][0]){
+            int id = receivedMessages[recK][1];
+            if(!lastMsgTime.ContainsKey(id) || lastMsgTime[id] / 86400 != sentBatches[sentK][0] / 86400){
+                if(allowances.ContainsKey(id)){
+                    allowances[id] = startingAllowance;
+                }
+                else{
+                    allowances.Add(id, startingAllowance);
+                }
+            }
+            if(allowances.ContainsKey(id)){
+                allowances[id]++;
+            }
+            else{
+                allowances.Add(id, startingAllowance + 1);
+            }
+            lastMsgTime[id] = receivedMessages[recK][0];
+            recK++;
+            
+        }
+        Console.WriteLine("Receiving stopped at " + recK);
+    }    
+    return indices.ToArray();
+}
