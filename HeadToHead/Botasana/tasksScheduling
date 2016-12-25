@@ -1,0 +1,58 @@
+int tasksScheduling(int workingHours, int[] tasks) {
+    Array.Sort(tasks);
+    Dictionary<int[],List<int>> theMap = new Dictionary<int[],List<int>>();
+    if(tasks[tasks.Length -1] > workingHours)
+        return -1;
+    
+    List<int> tasksList = new List<int>(tasks);
+    int days = 0;
+    while(tasksList.Count() > 0){
+        List<int> pick = helper(tasksList, workingHours, theMap);
+        foreach(int i in pick){
+            tasksList.Remove(i);
+        }
+        days++;
+    }
+    return days;
+}
+
+List<int> helper(List<int> taskList, int target, Dictionary<int[],List<int>> theMap){
+    taskList.Add(target);
+    int[] test = taskList.ToArray();
+    taskList.RemoveAt(taskList.Count()-1);
+    if(theMap.ContainsKey(test)){
+        return theMap[test];
+    }
+    else{
+        int min = int.MaxValue;
+        List<int> minList = null;
+        for(int i = 0; i < taskList.Count(); i++){
+            if(taskList[i] > target)
+                continue;
+            if(taskList[i] == target){
+                List<int> val = new List<int>(new int[2]{0, taskList[i]});
+                theMap.Add(test, val);
+                return val;
+            }
+            int num = taskList[i];
+            taskList.RemoveAt(i);
+            List<int> temp = helper(taskList, target - num, theMap);
+            if(temp != null){
+                if(temp[0] < min){
+                    min = temp[0];
+                    minList = temp;
+                    minList.Add(num);
+                }
+            }
+            else{
+                if(target-num < min){
+                    min = target-num;
+                    minList = new List<int>(new int[2]{target-num, num});
+                }
+            }
+            taskList.Insert(i,num);
+        }
+        theMap.Add(test, minList);
+        return minList;
+    }
+}
