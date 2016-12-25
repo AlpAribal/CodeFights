@@ -1,0 +1,38 @@
+string htmlToLuna(string html) {
+    Stack<string> tagStack = new Stack<string>();
+    while(html.Length > 0){
+        int startIndex = html.IndexOf("<");
+        int stopIndex = html.IndexOf(">");
+        string tag = html.Substring(startIndex+1, stopIndex-startIndex-1);
+        if(tag.Equals("div")||tag.Equals("p")||tag.Equals("b")){
+            tagStack.Push(tag);
+        }
+        else if(tag.Equals("/div")||tag.Equals("/p")||tag.Equals("/b")){
+            tag = tag.Substring(1);
+            string res = "";
+            while(!tagStack.Peek().Equals(tag)){
+                res = tagStack.Pop() + ", " + res;
+            }
+            tagStack.Pop();
+            if(res.Equals("")){
+                res = tag.ToUpper()+"([])";
+            }
+            else{
+                res = tag.ToUpper()+"(["+res.Substring(0,res.Length-2)+"])";
+            }            
+            tagStack.Push(res);
+        }
+        else{
+            tagStack.Push("IMG({})");
+        }
+        if(stopIndex == html.Length-1){
+            break;
+        }
+        html = html.Substring(stopIndex+1);
+    }
+    string ret = "";
+    while(tagStack.Count > 0){
+         ret = tagStack.Pop()+ret;
+    }
+    return ret;
+}
