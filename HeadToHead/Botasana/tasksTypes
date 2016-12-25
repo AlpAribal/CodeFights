@@ -1,0 +1,15 @@
+int[] tasksTypes(int[] deadlines, int day) {
+    int[] categories = new int[3]{0,0,0};
+    for(int i = 0; i < deadlines.Length; i++){
+        if(deadlines[i] <= day){
+            categories[0]++;
+        }
+        else if(deadlines[i] > day && deadlines[i] <= day + 7){
+            categories[1]++;
+        }
+        else{
+            categories[2]++;
+        }
+    }
+    return categories;
+}
