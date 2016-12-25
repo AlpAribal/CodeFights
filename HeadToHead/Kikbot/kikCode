@@ -1,0 +1,71 @@
+int[][][] kikCode(string userId) {
+    // Get the binary string
+    userId = Convert.ToString(Convert.ToInt64(userId), 2).PadLeft(52, '0');
+    // Reverse the string
+    char[] charArray = userId.ToCharArray();
+    Array.Reverse( charArray );
+    userId = new string( charArray );
+    // Split the string
+    string[] radii = new string[6];
+    radii[0] = userId.Substring(0,3);
+    Console.WriteLine(radii[0]);
+    radii[1] = userId.Substring(3,4);
+    Console.WriteLine(radii[1]);
+    radii[2] = userId.Substring(7,8);
+    Console.WriteLine(radii[2]);
+    radii[3] = userId.Substring(15,10);
+    Console.WriteLine(radii[3]);
+    radii[4] = userId.Substring(25,12);
+    Console.WriteLine(radii[4]);
+    radii[5] = userId.Substring(37,15);
+    Console.WriteLine(radii[5]);
+    
+    int[] circ = new int[6]{3,4,8,10,12,15};
+    
+    List<int[][]> sectors = new List<int[][]>();
+    for(int r = 0; r < 6; r++){
+        //Console.WriteLine("Sector " + (r+1) + "started");
+        int sectorStartIndex = sectors.Count(); 
+        string circle = radii[r];
+        int perSector = 360 / circ[r];
+        int count = 0;
+        int start = 0;
+        
+        for(int s = 0; s < circ[r]; s++){
+            if(radii[r][s] == '1'){
+                if(count == 0)
+                    start = s;
+                count++;
+            }
+            else{
+                if(count > 0){
+                    sectors.Add(new int[2][]{new int[2]{r+1, start*perSector}, new int[2]{r+1, (start+count)*perSector}});
+                /*Console.WriteLine("Sector added: " + (r+1) + "," + start*perSector + " | " + (r+1) + "," +  (start+count)*perSector);
+                    Console.WriteLine(start + "," + (count + start));*/
+                    count = 0;
+                }
+            }
+        }
+        if(count > 0){
+            int[][] firstSec;
+            if(sectors.Count() > sectorStartIndex){
+                firstSec = sectors[sectorStartIndex];
+                if(firstSec[0][1] == 0){
+                    //Console.WriteLine((r+1) + " birleşecek!");
+                    sectors.Add(new int[2][]{new int[2]{r+1, start*perSector}, new int[2]{r+1, (start+count)*perSector + firstSec[1][1]}});
+                    sectors.RemoveAt(sectorStartIndex);
+                    continue;   
+                }
+            }
+            sectors.Add(new int[2][]{new int[2]{r+1, start*perSector}, new int[2]{r+1, (start+count)*perSector}});
+                       
+        }
+    }
+    Console.WriteLine(sectors.Count());                            
+    int[][][] discs = new int[sectors.Count()][][];
+    for(int i = 0; i < sectors.Count(); i++){
+        discs[i] = new int[2][];
+        discs[i] = sectors[i];
+    }
+    return discs;
+}
