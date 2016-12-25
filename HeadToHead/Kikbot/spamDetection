@@ -1,0 +1,97 @@
+string[] spamDetection(string[][] messages, string[] spamSignals) {
+    string[] res = new string[4]{"passed","passed","passed","passed"};
+    
+    // Test 1
+    int count = 0; // # of msgs with < 5 words
+    for(int i = 0; i < messages.Length; i++){
+        string msg = messages[i][0].ToLower();
+        while(!char.IsLetter(msg[msg.Length-1]))
+            msg = msg.Substring(0, msg.Length-1);
+        if(Regex.Split(msg, "[^a-z]").Length < 5)
+            count++;
+    }
+    if(1.0 * count / messages.Length > 0.9){
+        // return count/#ofmsgs in simplified form
+        int p = count;
+        int q = messages.Length;
+        while(q != 0){
+            int temp = p % q;
+            p = q;
+            q = temp;
+        }
+        res[0] = "failed: " + (count/p) + "/" + (messages.Length/p);
+    }
+    
+    // Test 2
+    List<string> testTwoList = new List<string>();
+    for(int i = 0; i < messages.Length; i++){
+        string id = messages[i][1];
+        int numMesToId = 1;
+        int same = 1;
+        for(int j = i+1; j < messages.Length; j++){
+            if(id.Equals(messages[j][1])){
+                numMesToId++;
+                if(messages[i][0].Equals(messages[j][0]))
+                    same++;
+            }
+        }
+        if(numMesToId >= 2 && 1.0 * same / numMesToId > 0.5){
+            if(testTwoList.IndexOf(id) < 0)
+                testTwoList.Add(id);
+        }
+    }
+    if(testTwoList.Count() > 0){
+        testTwoList.Sort();
+        res[1] = "failed:";
+        for(int i = 0; i < testTwoList.Count(); i++){
+            res[1] += " " + testTwoList[i];
+        }
+    }
+    
+    // Test 3
+    if(messages.Length >= 2){
+        Dictionary<string, int> counts = new Dictionary<string, int>();
+        for(int i = 0; i < messages.Length; i++){
+            if(counts.ContainsKey(messages[i][0])){
+                counts[messages[i][0]]++;
+            }
+            else{
+                counts.Add(messages[i][0], 1);
+            }
+        }
+        foreach(string val in counts.Keys){
+            if(1.0 * counts[val] / messages.Length > 0.5){
+                res[2] = "failed: " + val;
+            }
+        }
+    }
+    
+    // Test 4
+    count = 0;
+    List<string> toAdd = new List<string>();
+    for(int i = 0; i < messages.Length; i++){     
+        bool spam = false;
+        string msg = messages[i][0].ToLower();
+        Regex rgx = new Regex("[^a-z ]");
+        msg = rgx.Replace(msg, " ");
+        msg = " " + msg + " ";
+        for(int j = 0; j < spamSignals.Length; j++){
+            string sig = spamSignals[j];
+            if(msg.IndexOf(" " + sig + " ") >= 0){
+                spam = true;
+                if(toAdd.IndexOf(sig) < 0)
+                   toAdd.Add(sig);
+            }
+        }
+        if(spam)
+            count++;
+    }
+    if(1.0 * count / messages.Length > 0.5){
+        toAdd.Sort();
+        res[3] = "failed:";
+        for(int i = 0; i < toAdd.Count(); i++){
+            res[3] += " " + toAdd[i];
+        }
+    }
+    return res;
+}
