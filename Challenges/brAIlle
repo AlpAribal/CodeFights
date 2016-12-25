@@ -1,0 +1,169 @@
+/*
+It is year 2050, and the AI has taken over the world. You are one of the few survivors living in a shelter out of the reach of the machines. One of your peers developed a virus for intercepting the messages the robots use to communicate with each other. He successfully installed the virus on the main communication server, but unfortunately he was killed in the process. However, the virus is now functioning, and you can read the messages the machines send to each other.
+
+The messages are written in the format that only machines and blind people can read (since AI also can't see...), and use the Braille alphabet. Each message consists of several symbols in Braille alphabet, that can be either lowercase English letters or digits. The main problem is that the virus is not perfect, and sometimes it alters the initial message. Here's how a message can be read:
+
+First, each message should have exactly three lines.
+If message has less than three lines, it cannot be decrypted and [?] should be returned.
+If message has more than three lines, the exceeding lines should be added to the first three lines one by one: the first exceeding line should be added to message[0], the next one should be added to message[1], the following line should be added to message[2], and the next should be added to message[0] again. The process should continue until message contains exactly three lines.
+When message is fixed to have exactly three lines, all lines should be fixed to have an equal length. The lines that are shorter than the longest one should be extended by whitespace (' ') characters.
+Once the message contains three lines of equal length, the main decryption process can begin. The lines of the message should be stacked, with message[0] at top and message[2] at bottom. The 3 × 3 squares of the obtained rectangle should be treated as Braille symbols, separated by one-column-long separators.
+Empty 3 × 3 square (containing no '#' symbols) is considered to be an empty symbol.
+A 3 × 3 square is considered invalid if it doesn't correspond to a Braille character or if its middle column is not empty. In this case, it should be translated as "[?]".
+If a separator is not empty (contains a '#' symbol), both 3 × 3 squares before and after it should be considered invalid.
+A number indicator works until the first invalid symbol, or the first symbol that cannot be treated as a digit.
+Given a message, your task is to translated it using the algorithm described above. Note, that consecutive [?] substrings in the result should be replace with a single [?].
+
+Example
+
+For
+
+message = ["# # # # #  ", 
+           "#   # # # #", 
+           "#   #   #  "]
+the output should be brAIlle(message) = "pqr".
+
+This message has not been altered. The 3 × 3 squares correspond to letters 'p', 'q' and 'r', so the answer is "pqr".
+
+pqr
+
+For
+
+message = ["# # # ", 
+           "", 
+           "#   #   #  ",
+           "# #  ",
+           "      #   #"]
+the output should be brAIlle(message) = "mno".
+
+This message has been altered. message[3] should be added to message[0] and message[1] should be replaced by message[4], giving 3 cells representing "mno".
+
+message = ["# # # # #  ", 
+           "      #   #", 
+           "#   #   #  "]
+mno
+
+For
+
+message = ["# # ###   # # #",
+           "    # #   #   #",
+           "    # # # #    "]
+the output should be brAIlle(message) = "c[?]4".
+
+This message has not been altered, but the second symbol is impossible to decode. Thus, the output should be "c[?]4".
+
+c4
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] array.string message
+
+An array of strings containing only '#' and ' ' (whitespace) characters.
+
+Constraints: 1 ≤ message.length ≤ 25,
+1 ≤ message[i].length ≤ 25.
+
+[output] string
+
+Translated message. The message should contain only lowercase English letters and digits.
+*/
+
+string brAIlle(string[] msg) {
+    if(msg.Length < 3)
+        return "[?]";
+    string res = "";
+    for(int i = 3; i < msg.Length; i++){
+        msg[i%3] += msg[i];
+    }
+    for(int i = 0; i < 3; i++){
+        Console.WriteLine(msg[i]);
+    }
+    Dictionary<string, string> alphabet = new Dictionary<string, string>();
+    alphabet.Add("#        ","a");
+    alphabet.Add("#  #     ","b");
+    alphabet.Add("# #      ","c");
+    alphabet.Add("# #  #   ","d");
+    alphabet.Add("#    #   ","e");
+    alphabet.Add("# ##     ","f");
+    alphabet.Add("# ## #   ","g");
+    alphabet.Add("#  # #   ","h");
+    alphabet.Add("  ##     ","i");
+    alphabet.Add("  ## #   ","j");
+    alphabet.Add("#     #  ","k");
+    alphabet.Add("#  #  #  ","l");
+    alphabet.Add("# #   #  ","m");
+    alphabet.Add("# #  ##  ","n");
+    alphabet.Add("#    ##  ","o");
+    alphabet.Add("# ##  #  ","p");
+    alphabet.Add("# ## ##  ","q");
+    alphabet.Add("#  # ##  ","r");
+    alphabet.Add("  ##  #  ","s");
+    alphabet.Add("  ## ##  ","t");
+    alphabet.Add("#     # #","u");
+    alphabet.Add("#  #  # #","v");
+    alphabet.Add("  ## #  #","w");
+    alphabet.Add("# #   # #","x");
+    alphabet.Add("# #  ## #","y");
+    alphabet.Add("#    ## #","z");
+    alphabet.Add("  #  ## #","#");
+    Dictionary<string, string> numbers = new Dictionary<string, string>();
+    numbers.Add("#        ","1");
+    numbers.Add("#  #     ","2");
+    numbers.Add("# #      ","3");
+    numbers.Add("# #  #   ","4");
+    numbers.Add("#    #   ","5");
+    numbers.Add("# ##     ","6");
+    numbers.Add("# ## #   ","7");
+    numbers.Add("#  # #   ","8");
+    numbers.Add("  ##     ","9");
+    numbers.Add("  ## #   ","0");
+    
+    int lineLength = Convert.ToInt32(Math.Max(Math.Max(msg[0].Length, msg[1].Length), msg[2].Length));
+    for(int i = 0; i < 3; i++){
+        msg[i] = msg[i].PadRight(lineLength, ' ');
+    }
+    bool isNumber = false;
+    for(int i = 0; i < lineLength; i+=4){
+        if(i+2 >= lineLength){
+            res += @"[?]";
+            break;
+        }
+        string lookup = msg[0].Substring(i,3) + msg[1].Substring(i,3) + msg[2].Substring(i,3);
+        if(i+3 < lineLength && (msg[0][i+3] != ' ' || msg[1][i+3] != ' ' || msg[2][i+3] != ' ')){
+            res += @"[?]";
+            res += @"[?]";
+            isNumber = false;
+            i += 4;
+        } 
+        else if(alphabet.ContainsKey(lookup)){
+            if(isNumber){
+                if(numbers.ContainsKey(lookup)){
+                    res += numbers[lookup];
+                }
+                else{
+                    isNumber = false;
+                }
+            }
+            if(!isNumber){
+                if(alphabet[lookup].Equals("#")){
+                    isNumber = true;
+                }
+                else{
+                    res += alphabet[lookup];
+                }
+            }
+        }
+        else{
+            if(!isNumber)
+                res += @"[?]";
+            isNumber = false;
+        }
+    }
+    
+    // remove duplicate [?]s
+    while(res.IndexOf(@"[?][?]") >= 0){
+        res = res.Replace(@"[?][?]", @"[?]");
+    }
+    return res;
+}
