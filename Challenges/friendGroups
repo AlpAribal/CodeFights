@@ -1,4 +1,5 @@
 /*
+https://codefights.com/challenge/por2d8kqNmPPfDvPt
 There are n kids in the class. As school year has just began, the kids barely know each other. However, the teacher knows that there are already some pairs of friends in the class.
 
 Since all kids are very friendly and amicable, they should quickly come to know each other. If kid a is a friend of kid b and kid b is a friend of kid c, kid a will definitely become a friend of kid c. Obviously, if kid a is a friend of kid b, kid b is in turn a friend of kida.
