@@ -1,4 +1,5 @@
 /*
+https://codefights.com/challenge/2QwakjPwpvBZRWkCE
 You're about to purchase an island of the Polygon Islands, and you want to calculate the total price of your purchase. Since you are also going to build a fence around its perimeter in case of a zombie apocalypses, you would also like to add its cost to the calculated price.
 
 All islands of the Polygon Islands are, obviously, polygons. Moreover, they are regular, which means that all their sides and angles are equal. The island you are interested in has n sides of length s each.
