@@ -1,4 +1,5 @@
 /*
+https://codefights.com/challenge/X24mkBe7RSyck9pHK
 It is year 2050, and the AI has taken over the world. You are one of the few survivors living in a shelter out of the reach of the machines. One of your peers developed a virus for intercepting the messages the robots use to communicate with each other. He successfully installed the virus on the main communication server, but unfortunately he was killed in the process. However, the virus is now functioning, and you can read the messages the machines send to each other.
 
 The messages are written in the format that only machines and blind people can read (since AI also can't see...), and use the Braille alphabet. Each message consists of several symbols in Braille alphabet, that can be either lowercase English letters or digits. The main problem is that the virus is not perfect, and sometimes it alters the initial message. Here's how a message can be read:
