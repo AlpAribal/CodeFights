@@ -1,4 +1,5 @@
 /*
+https://codefights.com/challenge/pESxR7nBYFjtZFWjk
 Given some color in the rgb format, your task is to convert it into the hsv format. The result should be an array of three formatted numbers, where:
 
 the first number is the Hue value rounded to the nearest integer;
