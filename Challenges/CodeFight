@@ -1,4 +1,5 @@
 /*
+https://codefights.com/challenge/okok2rHiWhetqWZfR
 Given a positive integer n, output the string representation of all the numbers from 1 to n inclusive while replacing multiples of 5 with Code, multiples of 7 with Fight and multiples of both 5 and 7 with CodeFight.
 
 Example
