@@ -1,0 +1,61 @@
+/* https://codefights.com/challenge/j25nRLWrMoWqoSiuj
+Every Christmas Mary's brother buys her a jar of candies, which naturally makes here very happy. Each year she counts the candies in the jar and writes down their number in her notebook, along with the current year.
+
+The Christmas is coming, and Mary wants to know in advance how many candies she will get this time. She turns to you, her brother's best friend, for help. To get you started, Mary gave you the list of values where she has been writing all the information so far.
+
+Your task is to study the list and try to determine how many candies Mary will get this year. You know that Mary's brother is very fond of statistics, so you want to approach the problem with the simple least squares linear regression model. Here's the result you should return:
+
+the next year number;
+the predicted number of candies Mary will get, rounded down to the nearest integer;
+the trend in the number of candies that can be "increasing", "decreasing" or "stable'.
+Example
+
+For
+
+values = [2012, 3, 2013, 4, 2014, 5, 2015, 6, 
+          2016, 7, 2017, 8, 2018, 9, 2019, 10]
+the output should be
+candyForeCast(values) = ["2020", "11", "increasing"].
+
+As you can see, each year Mary receives one more candy than the previous one. Thus, the trend is clearly "increasing", and in the next year of 2020 she will get 10 + 1 = 11 candies.
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] array.integer values
+
+An even array of integers, where values[2 * i + 1] is the number of candies Mary got in the year of values[2 * i] for each valid i. Note, that the years do not necessarily go in the increasing order.
+
+It is guaranteed that the years belong to some continuous period of time, and that no year is present twice.
+
+Constraints:
+0 ≤ values.length ≤ 200,
+values.length % 2 = 0,
+2000 ≤ year ≤ 2200,
+0 ≤ candy ≤ 106.
+
+[output] array.string
+
+The prediction in the format described above.
+
+If there are less than 4 values in Mary's list, return empty array instead.
+*/
+
+string[] candyForeCast(int[] v) {
+    int n = v.Length/2;
+    if(n < 2)
+        return new string[0];
+    double X = 0, Y = 0, mX = 0, xy = 0, X2 = 0;
+    for(int i = 0; i < n; i++){
+        int x = v[2*i], y = v[2*i+1];
+        Y += y;
+        if(x > mX)
+            mX = x;
+        X += x;
+        xy += x*y;
+        X2 += x*x;
+    }
+    mX++;
+    double b = (n*xy-X*Y)/(n*X2 - X*X), a = Y/n - b*X/n;
+    return new string[]{mX+"", Math.Floor(a+b*mX)+"", b > 0 ? "increasing" : b < 0 ? "decreasing" : "stable"};
+}
