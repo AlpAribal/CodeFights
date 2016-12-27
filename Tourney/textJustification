@@ -1,0 +1,82 @@
+/*
+Given an array of words and a length L, format the text such that each line has exactly L characters and is fully (left and right) justified. Words should be packed in a greedy approach; that is, pack as many words as it is possible in each line. Add extra spaces when necessary so that each line has exactly L characters.
+
+Extra spaces between words should be distributed as evenly as possible. If the number of spaces on a line do not divide evenly between words, the empty slots on the left will be assigned more spaces than the slots on the right. For the last line of text and lines with one word only, it should be left justified and no extra space is inserted between words.
+
+Example
+
+For words = ["This", "is", "an", "example", "of", "text", "justification."]
+and L = 16, the output should be
+
+textJustification(words, L) = ["This    is    an",
+                               "example  of text",
+                               "justification.  "]
+Input/Output
+
+[time limit] 3000ms (java)
+[input] array.string words
+
+Array of words, each word is guaranteed not to exceed L in length.
+
+Constraints:
+2 ≤ words.length ≤ 15,
+1 ≤ words[i].length ≤ L.
+
+[input] integer L
+
+Length of lines.
+
+Constraints:
+8 ≤ L ≤ 20.
+
+[output] array.string
+
+Formatted text as an array of lines.
+*/
+
+String[] textJustification(String[] words, int L) {
+
+  ArrayList<String> text = new ArrayList<>();
+  int currentWord = 0;
+
+  while (currentWord < words.length) {
+    int left = currentWord;
+    int right = left;
+    int currentSum = words[left].length();
+
+    while (right + 1 < words.length && currentSum + words[right + 1].length() + 1 <= L) {
+      currentSum += words[right + 1].length() + 1;
+      right++;
+    }
+
+    if (left == right) {
+      String line = words[left];
+      for (int i = 0; i < L - words[left].length(); i++) {
+        line += " ";
+      }
+      text.add(line);
+    } else {
+      int freeSpace = L - currentSum;
+      int minimalSpaceLen = 1 + freeSpace / (right - left);
+      int extraSpaces = freeSpace % (right - left);
+      String minimalSpace = "";
+      for (int i = 0; i < minimalSpaceLen; i++) {
+        minimalSpace += " ";
+      }
+
+      String line = "";
+      for (int i = left; i < right; i++) {
+        line += words[i] + minimalSpace;
+        if (extraSpaces > 0) {
+          line += " ";
+          extraSpaces--;
+        }
+      }
+
+      text.add(line + words[right]);
+    }
+    currentWord = right + 1;
+  }
+
+  return text.toArray(new String[text.size()]);
+}
