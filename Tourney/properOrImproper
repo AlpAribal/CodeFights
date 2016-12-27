@@ -1,0 +1,27 @@
+/*
+Determine whether a given fraction is proper.
+
+Example
+
+For A = [7, 2], the output should be
+properOrImproper(A) = "Improper".
+
+Input/Output
+
+[time limit] 3000ms (cs)
+[input] array.integer A
+
+Array of two integers representing a fraction A[0] / A[1].
+
+Constraints:
+-10 ≤ A[i] ≤ 10,
+A[i] ≠ 0.
+
+[output] string
+
+"Proper" if A contains a proper fraction, "Improper" otherwise.
+*/
+
+string properOrImproper(int[] A) {
+    return Math.Abs(A[0]/A[1]) < 1 ? "Proper" : "Improper";
+}
