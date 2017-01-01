@@ -1,0 +1,30 @@
+int allianceVersusMonster(int[] healthPoints, int[] attackDamage) {
+    Dictionary<string, int> results = new Dictionary<string, int>();
+    for(int i = 1; i < healthPoints.Length; i++){
+        if(healthPoints[i] > attackDamage[0]){
+            int times = healthPoints[i] / attackDamage[0];
+            if(healthPoints[i] % attackDamage[0] == 0)
+                times--;
+            healthPoints[i] -= attackDamage[0]*times;
+            healthPoints[0] -= attackDamage[i]*times;
+            if(healthPoints[0] <= 0)
+                return healthPoints.Length -1;
+        }
+    }
+    for(int i = 0; i < healthPoints.Length -1; i++){
+        // Find the warrior w/ max attack
+        // Can be O(nlogn) but who cares
+        int max = -1, maxIndex = -1;
+        for(int j = 1; j < healthPoints.Length; j++){
+            if(healthPoints[j] > 0 && attackDamage[j] > max){
+                max = attackDamage[j];
+                maxIndex = j;
+            }
+        }
+        if(healthPoints[0] <= max)
+            return healthPoints.Length -1 -i;
+        healthPoints[0] -= max;
+        healthPoints[maxIndex] = 0;
+    }
+    return 0;
+}
