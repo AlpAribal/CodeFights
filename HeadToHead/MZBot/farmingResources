@@ -1,0 +1,62 @@
+bool farmingResources(int[] friendlyTroops, int[] enemyTroops, int[] loggingCamp, int[][] impassableCells) {
+    HashSet<string> impass = new HashSet<string>();
+    for(int i = 0; i < impassableCells.Length; i++){
+        impass.Add(impassableCells[i][0]+"."+impassableCells[i][1]);
+    }
+    
+    int friendlyWay = help(friendlyTroops[0], friendlyTroops[1], loggingCamp[0], loggingCamp[1], impass, new List<int[]>());
+    
+    impass.Clear();
+    for(int i = 0; i < impassableCells.Length; i++){
+        impass.Add(impassableCells[i][0]+"."+impassableCells[i][1]);
+    }
+
+    int enemyWay = help(enemyTroops[0], enemyTroops[1], loggingCamp[0], loggingCamp[1] , impass, new List<int[]>());
+    Console.WriteLine("F: " + friendlyWay + " E:" + enemyWay);
+    return friendlyWay*friendlyTroops[2] < enemyWay*enemyTroops[2] ? true : false;
+}
+
+int help(int x, int y, int toX, int toY, HashSet<string> impass, List<int[]> list){
+    int min = int.MaxValue, count = 0;
+    while(true){
+        if(list.Count > 0)
+            list.RemoveAt(0);
+        string s = x+"."+y;
+        if(!impass.Contains(s)){
+            impass.Add(s);
+            if(count < min){
+                if(x == toX && y == toY){
+                    min = count;
+                    return min;
+                }
+                for(int j = -1; j < 2; j++){
+                    for(int i = (j >= 0 ? -1 : 0); i < (j <= 0 ? 2 : 1); i++){
+                        s = (x+i)+"."+(y+j);
+                        if(!impass.Contains(s)){
+                            list.Add(new int[3]{x+i,y+j,count+1});
+                        }
+                    }
+                }
+                if(list.Count > 0){
+                    x = list[0][0];
+                    y = list[0][1];
+                    count = list[0][2];
+                }        
+            }
+            else{
+                if(list.Count > 0){
+                    x = list[0][0];
+                    y = list[0][1];
+                    count = list[0][2];
+                }
+            }
+        }
+        else{
+            if(list.Count > 0){
+                    x = list[0][0];
+                    y = list[0][1];
+                    count = list[0][2];
+            }
+        }
+    }
+}
