@@ -1,0 +1,11 @@
+int allianceHelp(int t, int allianceSize){
+    int a = t/10, b = 60;
+    Console.WriteLine("a: " + a + " b: "+ b);
+    return helper(t, a, b, allianceSize < 10 ? allianceSize : 10);
+}
+int helper(int cur, int a, int b, int alliesLeft){
+    if(alliesLeft == 0 || cur == 0)
+        return cur;
+    int res1 = helper(Math.Max(0,cur-a), a, b, alliesLeft-1), res2 = helper(Math.Max(0,cur-b), a, b, alliesLeft-1);
+    return res1 < res2 ? res1 : res2;
+}
