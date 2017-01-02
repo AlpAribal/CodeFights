@@ -1,0 +1,28 @@
+/* https://codefights.com/challenge/v5Zg8trjoun3PTxrZ
+This problem can be solved by pre-school children in 5-10 minutes. By programmers in one hour. By people with a higher education… Well, it certainly can take them a while.
+
+Since you, CodeFighters, are supposed to be programmers, it shouldn't take you that long to solve it :) Take a look at the test cases and figure what this is all about.
+
+Beware the corner cases!
+
+[time limit] 3000ms (cs)
+[input] integer n
+
+Constraints:
+0 ≤ n ≤ 230
+
+[output] integer
+*/
+
+int countIt(int n) {
+    int c = 0;
+    do{
+        int a = n % 10;
+        if(a == 6 || a == 9 || a == 0)
+            c++;
+        if(a == 8)
+            c += 2;
+        n /= 10;
+    } while(n > 0);
+    return c;
+}
